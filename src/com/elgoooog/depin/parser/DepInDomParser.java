@@ -6,9 +6,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Nicholas Hauschild
@@ -16,6 +14,20 @@ import java.util.Map;
  *         Time: 11:25 PM
  */
 public class DepInDomParser implements DepInFileParser {
+    private static final Set<String> validArgNames = new HashSet<String>();
+
+    static {
+        validArgNames.add("int");
+        validArgNames.add("long");
+        validArgNames.add("short");
+        validArgNames.add("byte");
+        validArgNames.add("float");
+        validArgNames.add("double");
+        validArgNames.add("boolean");
+        validArgNames.add("char");
+        validArgNames.add("string");
+    }
+
     public void parseBeans(File file, Map<String, Object> beanMap) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -57,10 +69,10 @@ public class DepInDomParser implements DepInFileParser {
             Node node = children.item(i);
             if(node instanceof Element) {
                 Element child = (Element) node;
-                if("arg".equals(child.getNodeName())) {
-                    String type = child.getAttribute("type");
+                String nodeName = child.getNodeName();
+                if(validArgNames.contains(nodeName)) {
                     String val = child.getAttribute("val");
-                    addToArgs(val, type, args, types);
+                    addToArgs(val, nodeName, args, types);
                 }
             }
         }
@@ -95,7 +107,7 @@ public class DepInDomParser implements DepInFileParser {
         } else if("char".equalsIgnoreCase(type)) {
             args.add(val.charAt(0));
             types.add(char.class);
-        } else {
+        } else if("string".equalsIgnoreCase(type)) {
             args.add(val);
             types.add(String.class);
         }

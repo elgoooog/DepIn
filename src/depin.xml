@@ -3,15 +3,15 @@
     <bean id="Animal" class="com.elgoooog.depin.test.Animal"/>
 
     <bean id="Buff" class="com.elgoooog.depin.test.Cat">
-        <arg val="Buff"/>
+        <string val="Buff"/>
     </bean>
 
     <bean id="Fido" class="com.elgoooog.depin.test.Dog">
-        <arg val="Fido"/>
+        <string val="Fido"/>
     </bean>
 
     <bean id="Rex" class="com.elgoooog.depin.test.Dog">
-        <arg val="Rex"/>
-        <arg type="int" val="7"/>
+        <string val="Rex"/>
+        <int val="7"/>
     </bean>
 </depin>

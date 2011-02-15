@@ -64,11 +64,8 @@ public class DepInDomParserTest {
 
     @Test
     public void createInstanceTest() throws Exception {
-        Map<String, String> eTwoAttrs = new HashMap<String, String>();
-        eTwoAttrs.put("val","99");
-        eTwoAttrs.put("type","int");
-        Element e1 = new ElementStub("arg", Collections.singletonMap("val", "Yoda"));
-        Element e2 = new ElementStub("arg", eTwoAttrs);
+        Element e1 = new ElementStub("string", Collections.singletonMap("val", "Yoda"));
+        Element e2 = new ElementStub("int", Collections.singletonMap("val", "99"));
 
         Node[] nodes = new Element[]{e1, e2};
         NodeList nodeList = new NodeListStub(nodes);
