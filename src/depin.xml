@@ -14,4 +14,8 @@
         <string val="Rex"/>
         <int val="7"/>
     </bean>
+
+    <bean id="AnimalCage" class="com.elgoooog.depin.test.Cage">
+        <ref val="Animal"/>
+    </bean>
 </depin>

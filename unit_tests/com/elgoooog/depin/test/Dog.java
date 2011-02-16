@@ -18,6 +18,7 @@ public class Dog extends Animal {
         age = a;
     }
 
+    @Override
     public String getName() {
         return name;
     }

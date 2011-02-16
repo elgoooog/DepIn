@@ -1,5 +1,7 @@
 package com.elgoooog.depin.parser;
 
+import com.elgoooog.depin.test.Animal;
+import com.elgoooog.depin.test.Cat;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,17 +25,17 @@ public class DepInDomParserTest {
     }
 
     @Test
-    public void addToArgsTest() throws Exception {
+    public void addPrimitiveToArgsTest() throws Exception {
         List<Object> args = new ArrayList<Object>();
         List<Class<?>> types = new ArrayList<Class<?>>();
-        parser.addToArgs("1", "int", args, types);
-        parser.addToArgs("2.1", "double", args, types);
-        parser.addToArgs("true", "boolean", args, types);
-        parser.addToArgs("a", "char", args, types);
-        parser.addToArgs("123", "long", args, types);
-        parser.addToArgs("23.33", "float", args, types);
-        parser.addToArgs("12", "short", args, types);
-        parser.addToArgs("21", "byte", args, types);
+        parser.addPrimitiveToArgs("1", "int", args, types);
+        parser.addPrimitiveToArgs("2.1", "double", args, types);
+        parser.addPrimitiveToArgs("true", "boolean", args, types);
+        parser.addPrimitiveToArgs("a", "char", args, types);
+        parser.addPrimitiveToArgs("123", "long", args, types);
+        parser.addPrimitiveToArgs("23.33", "float", args, types);
+        parser.addPrimitiveToArgs("12", "short", args, types);
+        parser.addPrimitiveToArgs("21", "byte", args, types);
 
         assertEquals(1, args.get(0));
         assertEquals(int.class, types.get(0));
@@ -63,7 +65,30 @@ public class DepInDomParserTest {
     }
 
     @Test
-    public void createInstanceTest() throws Exception {
+    public void addRefToArgsTest() throws Exception {
+        Animal animal = new Dog("Frodo");
+        Dog dog = new Dog("Bilbo");
+        Cat cat = new Cat("Pepper");
+
+        List<Object> args = new ArrayList<Object>();
+        List<Class<?>> types = new ArrayList<Class<?>>();
+
+        parser.addRefToArgs(animal, args, types);
+        parser.addRefToArgs(dog, args, types);
+        parser.addRefToArgs(cat, args, types);
+
+        assertEquals(animal, args.get(0));
+        assertEquals(Dog.class, types.get(0));
+
+        assertEquals(dog, args.get(1));
+        assertEquals(Dog.class, types.get(1));
+
+        assertEquals(cat, args.get(2));
+        assertEquals(Cat.class, types.get(2));
+    }
+
+    @Test
+    public void createInstanceTest_primitives() throws Exception {
         Element e1 = new ElementStub("string", Collections.singletonMap("val", "Yoda"));
         Element e2 = new ElementStub("int", Collections.singletonMap("val", "99"));
 
@@ -71,7 +96,7 @@ public class DepInDomParserTest {
         NodeList nodeList = new NodeListStub(nodes);
         Element element = new ElementStub(nodeList);
         Class<?> clazz = Dog.class;
-        Object o = parser.createInstance(element, clazz);
+        Object o = parser.createInstance(element, clazz, Collections.<String, Object>emptyMap());
         Dog dog = (Dog) o;
 
         assertEquals(99, dog.getAge());

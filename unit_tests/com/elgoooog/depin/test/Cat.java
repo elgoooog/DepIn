@@ -12,6 +12,7 @@ public class Cat extends Animal {
         name = n;
     }
 
+    @Override
     public String getName() {
         return name;
     }

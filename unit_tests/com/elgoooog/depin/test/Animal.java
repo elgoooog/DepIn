@@ -6,4 +6,7 @@ package com.elgoooog.depin.test;
  * Time: 12:35 AM
  */
 public class Animal {
+    public String getName() {
+        return "animal";
+    }
 }

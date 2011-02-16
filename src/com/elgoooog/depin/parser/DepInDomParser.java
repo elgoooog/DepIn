@@ -45,7 +45,7 @@ public class DepInDomParser implements DepInFileParser {
                     if("bean".equals(bean.getNodeName())) {
                         String classString = bean.getAttribute("class");
                         Class<?> clazz = Class.forName(classString);
-                        Object instance = createInstance(bean, clazz);
+                        Object instance = createInstance(bean, clazz, beanMap);
 
                         String id = bean.getAttribute("id");
                         if(id != null) {
@@ -60,7 +60,7 @@ public class DepInDomParser implements DepInFileParser {
 
     }
 
-    protected Object createInstance(Element bean, Class<?> clazz) throws Exception {
+    protected Object createInstance(Element bean, Class<?> clazz, Map<String, Object> beanMap) throws Exception {
         NodeList children = bean.getChildNodes();
         List<Object> args = new ArrayList<Object>();
         List<Class<?>> types = new ArrayList<Class<?>>();
@@ -72,7 +72,10 @@ public class DepInDomParser implements DepInFileParser {
                 String nodeName = child.getNodeName();
                 if(validArgNames.contains(nodeName)) {
                     String val = child.getAttribute("val");
-                    addToArgs(val, nodeName, args, types);
+                    addPrimitiveToArgs(val, nodeName, args, types);
+                } else if("ref".equals(nodeName)) {
+                    Object o = beanMap.get(child.getAttribute("val"));
+                    addRefToArgs(o, args, types);
                 }
             }
         }
@@ -82,7 +85,12 @@ public class DepInDomParser implements DepInFileParser {
         return constructor.newInstance(args.toArray());
     }
 
-    protected void addToArgs(String val, String type, List<Object> args, List<Class<?>> types) {
+    protected void addRefToArgs(Object val, List<Object> args, List<Class<?>> types) {
+        args.add(val);
+        types.add(val.getClass());
+    }
+
+    protected void addPrimitiveToArgs(String val, String type, List<Object> args, List<Class<?>> types) {
         if("int".equalsIgnoreCase(type)) {
             args.add(Integer.parseInt(val));
             types.add(int.class);

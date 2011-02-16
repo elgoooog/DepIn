@@ -1,6 +1,7 @@
 package com.elgoooog.depin;
 
 import com.elgoooog.depin.test.Animal;
+import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Cat;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
@@ -29,14 +30,14 @@ public class DepInTest {
     }
 
     @Test
-    public void testConstructorWithArgs_val_1() throws Exception {
+    public void testConstructorWithPrimitive_val_1() throws Exception {
         Cat cat = (Cat)depin.get("Buff");
         assertNotNull(cat);
         assertEquals("Buff", cat.getName());
     }
 
     @Test
-    public void testConstructorWithArgs_val_2() throws Exception {
+    public void testConstructorWithPrimitive_val_2() throws Exception {
         Dog dog = (Dog)depin.get("Fido");
         assertNotNull(dog);
         assertEquals("Fido", dog.getName());
@@ -44,10 +45,18 @@ public class DepInTest {
     }
 
     @Test
-    public void testConstructorWithArgs_vals() throws Exception {
+    public void testConstructorWithPrimitive_vals() throws Exception {
         Dog dog = (Dog)depin.get("Rex");
         assertNotNull(dog);
         assertEquals("Rex", dog.getName());
         assertEquals(7, dog.getAge());
+    }
+
+    @Test
+    public void testConstructorWithRef() throws Exception {
+        Cage cage = (Cage)depin.get("AnimalCage");
+        assertNotNull(cage);
+        assertEquals("animal", cage.getAnimal().getName());
+        assertEquals(Animal.class, cage.getAnimal().getClass());
     }
 }
