@@ -80,9 +80,37 @@ public class DepInDomParser implements DepInFileParser {
             }
         }
 
-        Constructor<?> constructor = clazz.getConstructor(types.toArray(new Class<?>[types.size()]));
+        Constructor<?> constructor = findProperConstructor(clazz, types);
 
         return constructor.newInstance(args.toArray());
+    }
+
+    protected Constructor<?> findProperConstructor(Class<?> clazz, List<Class<?>> types) throws NoSuchMethodException {
+        Constructor<?>[] constructors = clazz.getConstructors();
+
+        for(int i = 0; i < constructors.length; ++i) {
+            Constructor constructor = constructors[i];
+            if(isProperConstructor(constructor, types)) {
+                return constructor;
+            }
+        }
+
+        return null;
+    }
+
+    protected boolean isProperConstructor(Constructor<?> constructor, List<Class<?>> types) {
+        Class<?>[] constructorParams = constructor.getParameterTypes();
+
+        if(constructorParams.length != types.size()) {
+            return false;
+        }
+
+        for(int i = 0; i < types.size(); ++i) {
+            if(!constructorParams[i].isAssignableFrom(types.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected void addRefToArgs(Object val, List<Object> args, List<Class<?>> types) {

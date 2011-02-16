@@ -1,15 +1,18 @@
 package com.elgoooog.depin.parser;
 
 import com.elgoooog.depin.test.Animal;
+import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Cat;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.*;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Nicholas Hauschild
@@ -85,6 +88,59 @@ public class DepInDomParserTest {
 
         assertEquals(cat, args.get(2));
         assertEquals(Cat.class, types.get(2));
+    }
+
+    @Test
+    public void findProperConstructorTest() throws Exception {
+        List<Class<?>> types = new ArrayList<Class<?>>();
+        types.add(String.class);
+        types.add(int.class);
+
+        Constructor<?> constructor = parser.findProperConstructor(Dog.class, types);
+
+        assertEquals(2, constructor.getParameterTypes().length);
+        assertEquals(String.class, constructor.getParameterTypes()[0]);
+        assertEquals(int.class, constructor.getParameterTypes()[1]);
+    }
+
+    @Test
+    public void findProperConstructorTest_subclass() throws Exception {
+        List<Class<?>> types = new ArrayList<Class<?>>();
+        types.add(Dog.class);
+
+        Constructor<?> constructor = parser.findProperConstructor(Cage.class, types);
+
+        assertEquals(1, constructor.getParameterTypes().length);
+        assertEquals(Animal.class, constructor.getParameterTypes()[0]);
+    }
+
+    @Test
+    public void isProperConstructorTest() throws Exception {
+        Constructor<?> twoArgDogConstructor = Dog.class.getConstructor(String.class, int.class);
+        List<Class<?>> types = new ArrayList<Class<?>>();
+
+        types.add(String.class);
+        types.add(int.class);
+
+        boolean isProperConstructor = parser.isProperConstructor(twoArgDogConstructor, types);
+        assertTrue(isProperConstructor);
+    }
+
+    @Test
+    public void isProperConstructorTest_subclass() throws Exception {
+        Constructor<?> oneArgCageConstructor = Cage.class.getConstructor(Animal.class);
+
+        List<Class<?>> types = new ArrayList<Class<?>>();
+        types.add(Dog.class);
+
+        boolean isProperConstructor = parser.isProperConstructor(oneArgCageConstructor, types);
+        assertTrue(isProperConstructor);
+
+        List<Class<?>> types2 = new ArrayList<Class<?>>();
+        types2.add(Animal.class);
+
+        boolean isProperConstructor2 = parser.isProperConstructor(oneArgCageConstructor, types2);
+        assertTrue(isProperConstructor2);
     }
 
     @Test

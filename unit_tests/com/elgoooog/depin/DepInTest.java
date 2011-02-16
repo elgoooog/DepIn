@@ -59,4 +59,12 @@ public class DepInTest {
         assertEquals("animal", cage.getAnimal().getName());
         assertEquals(Animal.class, cage.getAnimal().getClass());
     }
+
+    @Test
+    public void testConstructorWithRef_childType() throws Exception {
+        Cage cage = (Cage)depin.get("DogCage");
+        assertNotNull(cage);
+        assertEquals("Fido", cage.getAnimal().getName());
+        assertEquals(Dog.class, cage.getAnimal().getClass());
+    }
 }
