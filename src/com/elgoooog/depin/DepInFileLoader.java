@@ -1,10 +1,10 @@
 package com.elgoooog.depin;
 
-import com.elgoooog.depin.parser.DepInDomParser;
 import com.elgoooog.depin.parser.DepInFileParser;
+import com.elgoooog.depin.parser.DepInStaxParser;
 
 import java.io.File;
-import java.util.*;
+import java.util.Map;
 
 /**
  * DepInFileLoader is responsible for finding and loading the configuration file that is used by {@link DepIn} as
@@ -15,7 +15,7 @@ import java.util.*;
  *         Time: 11:51 PM
  */
 public class DepInFileLoader {
-    private DepInFileParser parser = new DepInDomParser();
+    private DepInFileParser parser = new DepInStaxParser();
 
     DepInFileLoader() {
 

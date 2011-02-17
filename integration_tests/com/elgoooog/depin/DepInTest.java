@@ -12,8 +12,8 @@ import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Nicholas Hauschild
- * Date: 2/8/11
- * Time: 12:18 AM
+ *         Date: 2/8/11
+ *         Time: 12:18 AM
  */
 public class DepInTest {
     private DepIn depin;
@@ -25,20 +25,20 @@ public class DepInTest {
 
     @Test
     public void testDefaultConstructor() throws Exception {
-        Animal animal = (Animal)depin.get("Animal");
+        Animal animal = (Animal) depin.get("Animal");
         assertNotNull(animal);
     }
 
     @Test
     public void testConstructorWithPrimitive_val_1() throws Exception {
-        Cat cat = (Cat)depin.get("Buff");
+        Cat cat = (Cat) depin.get("Buff");
         assertNotNull(cat);
         assertEquals("Buff", cat.getName());
     }
 
     @Test
     public void testConstructorWithPrimitive_val_2() throws Exception {
-        Dog dog = (Dog)depin.get("Fido");
+        Dog dog = (Dog) depin.get("Fido");
         assertNotNull(dog);
         assertEquals("Fido", dog.getName());
         assertEquals(0, dog.getAge());
@@ -46,7 +46,7 @@ public class DepInTest {
 
     @Test
     public void testConstructorWithPrimitive_vals() throws Exception {
-        Dog dog = (Dog)depin.get("Rex");
+        Dog dog = (Dog) depin.get("Rex");
         assertNotNull(dog);
         assertEquals("Rex", dog.getName());
         assertEquals(7, dog.getAge());
@@ -54,7 +54,7 @@ public class DepInTest {
 
     @Test
     public void testConstructorWithRef() throws Exception {
-        Cage cage = (Cage)depin.get("AnimalCage");
+        Cage cage = (Cage) depin.get("AnimalCage");
         assertNotNull(cage);
         assertEquals("animal", cage.getAnimal().getName());
         assertEquals(Animal.class, cage.getAnimal().getClass());
@@ -62,7 +62,7 @@ public class DepInTest {
 
     @Test
     public void testConstructorWithRef_childType() throws Exception {
-        Cage cage = (Cage)depin.get("DogCage");
+        Cage cage = (Cage) depin.get("DogCage");
         assertNotNull(cage);
         assertEquals("Fido", cage.getAnimal().getName());
         assertEquals(Dog.class, cage.getAnimal().getClass());

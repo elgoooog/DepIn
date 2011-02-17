@@ -7,8 +7,8 @@ import java.util.Map;
  * DepIn is the main class with which one can access the beans created by the configuration file.
  *
  * @author Nicholas Hauschild
- * Date: 2/7/11
- * Time: 11:56 PM
+ *         Date: 2/7/11
+ *         Time: 11:56 PM
  */
 public class DepIn {
     private static DepIn instance = new DepIn();

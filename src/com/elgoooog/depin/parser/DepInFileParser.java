@@ -9,5 +9,5 @@ import java.util.Map;
  *         Time: 11:23 PM
  */
 public interface DepInFileParser {
-    void parseBeans(File file, Map<String,Object> beans);
+    void parseBeans(File file, Map<String, Object> beans);
 }

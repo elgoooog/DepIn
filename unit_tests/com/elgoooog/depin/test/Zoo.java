@@ -11,7 +11,7 @@ public class Zoo {
     private List<Cage> cages;
 
     public Zoo(Cage... c) {
-        for(Cage cage : c) {
+        for (Cage cage : c) {
             cages.add(cage);
         }
     }

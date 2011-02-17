@@ -2,8 +2,8 @@ package com.elgoooog.depin.test;
 
 /**
  * @author Nicholas Hauschild
- * Date: 2/8/11
- * Time: 11:45 PM
+ *         Date: 2/8/11
+ *         Time: 11:45 PM
  */
 public class Cat extends Animal {
     private String name;

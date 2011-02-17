@@ -22,4 +22,6 @@
     <bean id="DogCage" class="com.elgoooog.depin.test.Cage">
         <ref val="Fido"/>
     </bean>
+
+
 </depin>
