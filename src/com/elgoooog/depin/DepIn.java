@@ -1,7 +1,6 @@
 package com.elgoooog.depin;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.elgoooog.depin.parser.model.Beans;
 
 /**
  * DepIn is the main class with which one can access the beans created by the configuration file.
@@ -13,11 +12,9 @@ import java.util.Map;
 public class DepIn {
     private static DepIn instance = new DepIn();
 
-    private Map<String, Object> beans = new HashMap<String, Object>();
-
     private DepIn() {
         DepInFileLoader fileLoader = new DepInFileLoader();
-        fileLoader.load("src/depin.xml", beans);
+        fileLoader.load("src/depin.xml");
     }
 
     public static DepIn getInstance() {
@@ -25,6 +22,6 @@ public class DepIn {
     }
 
     public Object get(String id) {
-        return beans.get(id);
+        return Beans.getBean(id).getInstance();
     }
 }

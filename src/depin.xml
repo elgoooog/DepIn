@@ -23,5 +23,5 @@
         <ref val="Fido"/>
     </bean>
 
-
+    <bean id="SingletonAnimal" class="com.elgoooog.depin.test.Animal" scope="singleton"/>
 </depin>

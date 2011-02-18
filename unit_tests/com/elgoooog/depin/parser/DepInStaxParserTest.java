@@ -3,6 +3,7 @@ package com.elgoooog.depin.parser;
 import com.elgoooog.depin.parser.model.Bean;
 import com.elgoooog.depin.parser.model.Beans;
 import com.elgoooog.depin.parser.model.Literal;
+import com.elgoooog.depin.parser.model.PrototypeBean;
 import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
@@ -21,7 +22,8 @@ public class DepInStaxParserTest {
 
     @BeforeClass
     public static void init() throws Exception {
-        Bean fidoBean = new Bean(Dog.class);
+        Bean fidoBean = new PrototypeBean(Dog.class);
+        fidoBean.setId("test--Fido");
         fidoBean.addArg(new Literal("fido"));
         fidoBean.addArg(new Literal(int.class, 7));
         Beans.addBean("Fido", fidoBean);
@@ -34,7 +36,8 @@ public class DepInStaxParserTest {
 
     @Test
     public void updateBeanWithLiteralArgTest() throws Exception {
-        Bean bean = new Bean(Dog.class);
+        Bean bean = new PrototypeBean(Dog.class);
+        bean.setId("test--Dog");
 
         parser.updateBeanWithLiteralArg(bean, "string", "bob");
         parser.updateBeanWithLiteralArg(bean, "int", "3");
@@ -48,7 +51,9 @@ public class DepInStaxParserTest {
 
     @Test
     public void updateBeanWithRefArgTest() throws Exception {
-        Bean cageBean = new Bean(Cage.class);
+        Bean cageBean = new PrototypeBean(Cage.class);
+        cageBean.setId("test--Cage");
+
         Bean dogBean = Beans.getBean("Fido");
         Dog expected = (Dog) dogBean.getInstance();
 

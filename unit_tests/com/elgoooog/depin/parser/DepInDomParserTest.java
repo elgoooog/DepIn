@@ -1,13 +1,16 @@
 package com.elgoooog.depin.parser;
 
-import com.elgoooog.depin.test.Animal;
-import com.elgoooog.depin.test.Cat;
+import com.elgoooog.depin.parser.model.Bean;
+import com.elgoooog.depin.parser.model.Beans;
+import com.elgoooog.depin.parser.model.Literal;
+import com.elgoooog.depin.parser.model.PrototypeBean;
+import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,88 +25,65 @@ import static org.junit.Assert.assertEquals;
 public class DepInDomParserTest {
     private DepInDomParser parser;
 
+    @BeforeClass
+    public static void init() throws Exception {
+        Bean fidoBean = new PrototypeBean(Dog.class);
+        fidoBean.setId("test--Fido");
+        fidoBean.addArg(new Literal("fido"));
+        fidoBean.addArg(new Literal(int.class, 7));
+        Beans.addBean("Fido", fidoBean);
+    }
+
     @Before
     public void setup() throws Exception {
         parser = new DepInDomParser();
     }
 
     @Test
-    public void addPrimitiveToArgsTest() throws Exception {
-        List<Object> args = new ArrayList<Object>();
-        List<Class<?>> types = new ArrayList<Class<?>>();
-        parser.addPrimitiveToArgs("1", "int", args, types);
-        parser.addPrimitiveToArgs("2.1", "double", args, types);
-        parser.addPrimitiveToArgs("true", "boolean", args, types);
-        parser.addPrimitiveToArgs("a", "char", args, types);
-        parser.addPrimitiveToArgs("123", "long", args, types);
-        parser.addPrimitiveToArgs("23.33", "float", args, types);
-        parser.addPrimitiveToArgs("12", "short", args, types);
-        parser.addPrimitiveToArgs("21", "byte", args, types);
+    public void updateBeanWithLiteralArgTest() throws Exception {
+        Bean bean = new PrototypeBean(Dog.class);
+        bean.setId("test--Dog");
 
-        assertEquals(1, args.get(0));
-        assertEquals(int.class, types.get(0));
+        parser.updateBeanWithLiteralArg(bean, "string", "bob");
+        parser.updateBeanWithLiteralArg(bean, "int", "3");
 
-        assertEquals(2.1, args.get(1));
-        assertEquals(double.class, types.get(1));
+        assertEquals("bob", bean.getArgs().get(0).getValue());
+        assertEquals(String.class, bean.getArgs().get(0).getType());
 
-        assertEquals(true, args.get(2));
-        assertEquals(boolean.class, types.get(2));
-
-        assertEquals('a', args.get(3));
-        assertEquals(char.class, types.get(3));
-
-        assertEquals(123L, args.get(4));
-        assertEquals(long.class, types.get(4));
-
-        assertEquals(23.33F, args.get(5));
-        assertEquals(float.class, types.get(5));
-
-        short s = 12;
-        assertEquals(s, args.get(6));
-        assertEquals(short.class, types.get(6));
-
-        byte b = 21;
-        assertEquals(b, args.get(7));
-        assertEquals(byte.class, types.get(7));
+        assertEquals(3, bean.getArgs().get(1).getValue());
+        assertEquals(int.class, bean.getArgs().get(1).getType());
     }
 
     @Test
-    public void addRefToArgsTest() throws Exception {
-        Animal animal = new Dog("Frodo");
-        Dog dog = new Dog("Bilbo");
-        Cat cat = new Cat("Pepper");
+    public void updateBeanWithRefArgTest() throws Exception {
+        Bean cageBean = new PrototypeBean(Cage.class);
+        cageBean.setId("test--Cage");
 
-        List<Object> args = new ArrayList<Object>();
-        List<Class<?>> types = new ArrayList<Class<?>>();
+        Bean dogBean = Beans.getBean("Fido");
+        Dog expected = (Dog) dogBean.getInstance();
 
-        parser.addRefToArgs(animal, args, types);
-        parser.addRefToArgs(dog, args, types);
-        parser.addRefToArgs(cat, args, types);
+        parser.updateBeanWithRefArg(cageBean, "Fido");
 
-        assertEquals(animal, args.get(0));
-        assertEquals(Dog.class, types.get(0));
-
-        assertEquals(dog, args.get(1));
-        assertEquals(Dog.class, types.get(1));
-
-        assertEquals(cat, args.get(2));
-        assertEquals(Cat.class, types.get(2));
+        assertEquals(Dog.class, cageBean.getArgs().get(0).getType());
+        Dog actual = (Dog) cageBean.getArgs().get(0).getValue();
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getAge(), actual.getAge());
     }
 
     @Test
-    public void createInstanceTest_primitives() throws Exception {
+    public void populateModel() throws Exception {
         Element e1 = new ElementStub("string", Collections.singletonMap("val", "Yoda"));
         Element e2 = new ElementStub("int", Collections.singletonMap("val", "99"));
 
         Node[] nodes = new Element[]{e1, e2};
         NodeList nodeList = new NodeListStub(nodes);
         Element element = new ElementStub(nodeList);
-        Class<?> clazz = Dog.class;
-        Object o = parser.createInstance(element, clazz, Collections.<String, Object>emptyMap());
-        Dog dog = (Dog) o;
+        Bean bean = new PrototypeBean(Dog.class);
+        parser.populateModel(element, bean);
 
-        assertEquals(99, dog.getAge());
-        assertEquals("Yoda", dog.getName());
+        List<Object> vals = bean.getArgs().getVals();
+        assertEquals("Yoda", vals.get(0));
+        assertEquals(99, vals.get(1));
     }
 
     private class ElementStub implements Element {

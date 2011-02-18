@@ -2,8 +2,6 @@ package com.elgoooog.depin.parser;
 
 import com.elgoooog.depin.parser.model.Bean;
 import com.elgoooog.depin.parser.model.Beans;
-import com.elgoooog.depin.parser.model.Literal;
-import com.elgoooog.depin.parser.model.Ref;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -21,15 +19,13 @@ import java.util.Map;
  *         Time: 11:25 PM
  */
 public class DepInStaxParser extends BaseDepInFileParser {
-
-
-    public void parseBeans(File file, Map<String, Object> beans) {
+    public void parseBeans(File file) {
         try {
             InputStream fileStream = new FileInputStream(file);
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             XMLStreamReader streamReader = inputFactory.createXMLStreamReader(fileStream);
 
-            parse(streamReader, beans);
+            parse(streamReader);
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException("file not found: " + file.getAbsolutePath());
@@ -39,7 +35,7 @@ public class DepInStaxParser extends BaseDepInFileParser {
     }
 
 
-    protected void parse(XMLStreamReader streamReader, Map<String, Object> beans) throws XMLStreamException {
+    protected void parse(XMLStreamReader streamReader) throws XMLStreamException {
         String currentElement;
         Bean bean = null;
         while (streamReader.hasNext()) {
@@ -54,11 +50,13 @@ public class DepInStaxParser extends BaseDepInFileParser {
                     }
 
                     if ("bean".equalsIgnoreCase(currentElement)) {
-                        if (attrs.get("class") == null) {
+                        String clazz = attrs.get("class");
+                        if (clazz == null) {
                             throw new RuntimeException("missing required attribute: 'class'");
                         }
 
-                        bean = new Bean(attrs.get("class"));
+                        bean = createBean(attrs.get("scope"), clazz);
+
                         bean.setId(attrs.get("id"));
                     } else if (validArgNames.contains(currentElement)) {
                         updateBeanWithLiteralArg(bean, currentElement, attrs.get("val"));
@@ -77,36 +75,6 @@ public class DepInStaxParser extends BaseDepInFileParser {
                 default:
                     break;
             }
-        }
-
-        for (Bean b : Beans.allBeans()) {
-            beans.put(b.getId(), b.getInstance());
-        }
-    }
-
-    protected void updateBeanWithRefArg(Bean bean, String val) {
-        bean.addArg(new Ref(val));
-    }
-
-    protected void updateBeanWithLiteralArg(Bean bean, String currentElement, String val) {
-        if ("int".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(int.class, Integer.parseInt(val)));
-        } else if ("float".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(float.class, Float.parseFloat(val)));
-        } else if ("long".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(long.class, Long.parseLong(val)));
-        } else if ("double".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(double.class, Double.parseDouble(val)));
-        } else if ("short".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(short.class, Short.parseShort(val)));
-        } else if ("byte".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(byte.class, Byte.parseByte(val)));
-        } else if ("boolean".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(boolean.class, Boolean.parseBoolean(val)));
-        } else if ("char".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(char.class, val.charAt(0)));
-        } else if ("string".equalsIgnoreCase(currentElement)) {
-            bean.addArg(new Literal(val));
         }
     }
 }

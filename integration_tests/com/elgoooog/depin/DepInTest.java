@@ -7,8 +7,7 @@ import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Nicholas Hauschild
@@ -66,5 +65,21 @@ public class DepInTest {
         assertNotNull(cage);
         assertEquals("Fido", cage.getAnimal().getName());
         assertEquals(Dog.class, cage.getAnimal().getClass());
+    }
+
+    @Test
+    public void testPrototype() throws Exception {
+        Animal animal1 = (Animal) depin.get("Animal");
+        Animal animal2 = (Animal) depin.get("Animal");
+
+        assertNotSame(animal1, animal2);
+    }
+
+    @Test
+    public void testSingleton() throws Exception {
+        Animal animal1 = (Animal) depin.get("SingletonAnimal");
+        Animal animal2 = (Animal) depin.get("SingletonAnimal");
+
+        assertSame(animal1, animal2);
     }
 }
