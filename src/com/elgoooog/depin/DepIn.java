@@ -1,6 +1,12 @@
 package com.elgoooog.depin;
 
+import com.elgoooog.depin.parser.model.Bean;
 import com.elgoooog.depin.parser.model.Beans;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
  * DepIn is the main class with which one can access the beans created by the configuration file.
@@ -12,9 +18,10 @@ import com.elgoooog.depin.parser.model.Beans;
 public class DepIn {
     private static DepIn instance = new DepIn();
 
+    private DepInFileLoader fileLoader = new DepInFileLoader();
+
     private DepIn() {
-        DepInFileLoader fileLoader = new DepInFileLoader();
-        fileLoader.load("src/depin.xml");
+
     }
 
     public static DepIn getInstance() {
@@ -22,6 +29,41 @@ public class DepIn {
     }
 
     public Object get(String id) {
-        return Beans.getBean(id).getInstance();
+        Bean bean = Beans.getBean(id);
+        if(bean == null) {
+            throw new RuntimeException("No such bean in configuration: " + id);
+        }
+
+        return bean.getInstance();
+    }
+
+    public void loadConfiguration() {
+        String configFile = System.getProperty("depinConfigurationFile");
+
+        if(configFile != null) {
+            loadConfiguration(configFile);
+        } else {
+            loadConfiguration("config/depin.xml");
+        }
+    }
+
+    public void loadConfiguration(String file) {
+        loadConfiguration(new File(file));
+    }
+
+    public void loadConfiguration(File file) {
+        try {
+            loadConfiguration(new FileInputStream(file));
+        } catch(FileNotFoundException e) {
+            throw new RuntimeException("could not find file: "+ file.getAbsolutePath());
+        }
+    }
+
+    public void loadConfiguration(InputStream is) {
+        fileLoader.load(is);
+    }
+
+    void setFileLoader(DepInFileLoader loader) {
+        fileLoader = loader;
     }
 }

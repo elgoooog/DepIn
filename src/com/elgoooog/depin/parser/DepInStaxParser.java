@@ -6,9 +6,6 @@ import com.elgoooog.depin.parser.model.Beans;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,18 +16,15 @@ import java.util.Map;
  *         Time: 11:25 PM
  */
 public class DepInStaxParser extends BaseDepInFileParser {
-    public void parseBeans(File file) {
+    public void parseBeans(InputStream is) {
         try {
-            InputStream fileStream = new FileInputStream(file);
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-            XMLStreamReader streamReader = inputFactory.createXMLStreamReader(fileStream);
+            XMLStreamReader streamReader = inputFactory.createXMLStreamReader(is);
 
             parse(streamReader);
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("file not found: " + file.getAbsolutePath());
         } catch (XMLStreamException e) {
-            throw new RuntimeException("failed to parse file: " + file.getAbsolutePath());
+            throw new RuntimeException("failed to parse stream");
         }
     }
 

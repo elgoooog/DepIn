@@ -14,12 +14,13 @@ import static org.junit.Assert.*;
  *         Date: 2/8/11
  *         Time: 12:18 AM
  */
-public class DepInTest {
+public class DepInIntegrationTest {
     private DepIn depin;
 
     @Before
     public void getDepin() {
         depin = DepIn.getInstance();
+        depin.loadConfiguration();
     }
 
     @Test

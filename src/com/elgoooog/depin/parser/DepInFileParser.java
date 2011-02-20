@@ -1,6 +1,6 @@
 package com.elgoooog.depin.parser;
 
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author Nicholas Hauschild
@@ -8,5 +8,5 @@ import java.io.File;
  *         Time: 11:23 PM
  */
 public interface DepInFileParser {
-    void parseBeans(File file);
+    void parseBeans(InputStream is);
 }

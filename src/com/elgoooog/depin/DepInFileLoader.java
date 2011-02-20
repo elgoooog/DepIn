@@ -3,7 +3,7 @@ package com.elgoooog.depin;
 import com.elgoooog.depin.parser.DepInFileParser;
 import com.elgoooog.depin.parser.DepInStaxParser;
 
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * DepInFileLoader is responsible for finding and loading the configuration file that is used by {@link DepIn} as
@@ -20,11 +20,7 @@ public class DepInFileLoader {
 
     }
 
-    protected void load(String file) {
-        load(new File(file));
-    }
-
-    protected void load(File file) {
-        parser.parseBeans(file);
+    protected void load(InputStream is) {
+        parser.parseBeans(is);
     }
 }

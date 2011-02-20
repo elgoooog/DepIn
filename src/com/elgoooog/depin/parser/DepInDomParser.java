@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author Nicholas Hauschild
@@ -17,11 +17,11 @@ import java.io.File;
  *         Time: 11:25 PM
  */
 public class DepInDomParser extends BaseDepInFileParser {
-    public void parseBeans(File file) {
+    public void parseBeans(InputStream is) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(file);
+            Document doc = dBuilder.parse(is);
 
             Element root = doc.getDocumentElement();
             root.normalize();
@@ -33,7 +33,6 @@ public class DepInDomParser extends BaseDepInFileParser {
                     Element bean = (Element) node;
                     if ("bean".equals(bean.getNodeName())) {
                         String classString = bean.getAttribute("class");
-                        Class<?> clazz = Class.forName(classString);
                         String scope = bean.getAttribute("scope");
 
                         Bean beanModel = createBean(scope, classString);
