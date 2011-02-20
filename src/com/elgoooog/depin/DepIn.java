@@ -1,7 +1,6 @@
 package com.elgoooog.depin;
 
 import com.elgoooog.depin.parser.model.Bean;
-import com.elgoooog.depin.parser.model.Beans;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,20 +15,16 @@ import java.io.InputStream;
  *         Time: 11:56 PM
  */
 public class DepIn {
-    private static DepIn instance = new DepIn();
+    private DepInFileLoader fileLoader;
+    private Beans beans;
 
-    private DepInFileLoader fileLoader = new DepInFileLoader();
-
-    private DepIn() {
-
-    }
-
-    public static DepIn getInstance() {
-        return instance;
+    public DepIn(DepInFileLoader loader) {
+        fileLoader = loader;
+        beans = new Beans();
     }
 
     public Object get(String id) {
-        Bean bean = Beans.getBean(id);
+        Bean bean = beans.getBean(id);
         if(bean == null) {
             throw new RuntimeException("No such bean in configuration: " + id);
         }
@@ -60,10 +55,6 @@ public class DepIn {
     }
 
     public void loadConfiguration(InputStream is) {
-        fileLoader.load(is);
-    }
-
-    void setFileLoader(DepInFileLoader loader) {
-        fileLoader = loader;
+        fileLoader.load(is, beans);
     }
 }

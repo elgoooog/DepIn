@@ -1,5 +1,7 @@
 package com.elgoooog.depin.parser;
 
+import com.elgoooog.depin.Beans;
+
 import java.io.InputStream;
 
 /**
@@ -8,5 +10,5 @@ import java.io.InputStream;
  *         Time: 11:23 PM
  */
 public interface DepInFileParser {
-    void parseBeans(InputStream is);
+    void parseBeans(InputStream is, Beans beans);
 }

@@ -6,19 +6,19 @@ package com.elgoooog.depin.parser.model;
  *         Time: 12:23 AM
  */
 public class Ref implements Arg {
-    private String ref;
+    private Bean ref;
 
-    public Ref(String r) {
+    public Ref(Bean r) {
         ref = r;
     }
 
     @Override
     public Class<?> getType() {
-        return Beans.getBean(ref).getBeanClass();
+        return ref.getBeanClass();
     }
 
     @Override
     public Object getValue() {
-        return Beans.getBean(ref).getInstance();
+        return ref.getInstance();
     }
 }

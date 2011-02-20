@@ -25,8 +25,8 @@ public abstract class BaseDepInFileParser implements DepInFileParser {
         validArgNames.add("string");
     }
 
-    protected void updateBeanWithRefArg(Bean bean, String val) {
-        bean.addArg(new Ref(val));
+    protected void updateBeanWithRefArg(Bean bean, Bean ref) {
+        bean.addArg(new Ref(ref));
     }
 
     protected void updateBeanWithLiteralArg(Bean bean, String currentElement, String val) {

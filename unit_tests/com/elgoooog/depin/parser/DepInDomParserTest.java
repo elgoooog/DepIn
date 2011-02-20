@@ -1,13 +1,13 @@
 package com.elgoooog.depin.parser;
 
+import com.elgoooog.depin.Beans;
 import com.elgoooog.depin.parser.model.Bean;
-import com.elgoooog.depin.parser.model.Beans;
 import com.elgoooog.depin.parser.model.Literal;
 import com.elgoooog.depin.parser.model.PrototypeBean;
+import com.elgoooog.depin.parser.model.SingletonBean;
 import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.*;
 
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Nicholas Hauschild
@@ -24,15 +25,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class DepInDomParserTest {
     private DepInDomParser parser;
-
-    @BeforeClass
-    public static void init() throws Exception {
-        Bean fidoBean = new PrototypeBean(Dog.class);
-        fidoBean.setId("test--Fido");
-        fidoBean.addArg(new Literal("fido"));
-        fidoBean.addArg(new Literal(int.class, 7));
-        Beans.addBean("Fido", fidoBean);
-    }
 
     @Before
     public void setup() throws Exception {
@@ -59,15 +51,27 @@ public class DepInDomParserTest {
         Bean cageBean = new PrototypeBean(Cage.class);
         cageBean.setId("test--Cage");
 
-        Bean dogBean = Beans.getBean("Fido");
-        Dog expected = (Dog) dogBean.getInstance();
+        Bean fidoBean = new PrototypeBean(Dog.class);
+        fidoBean.setId("test--Fido");
+        fidoBean.addArg(new Literal("fido"));
+        fidoBean.addArg(new Literal(int.class, 7));
+        Dog expected = (Dog) fidoBean.getInstance();
 
-        parser.updateBeanWithRefArg(cageBean, "Fido");
+        parser.updateBeanWithRefArg(cageBean, fidoBean);
 
         assertEquals(Dog.class, cageBean.getArgs().get(0).getType());
         Dog actual = (Dog) cageBean.getArgs().get(0).getValue();
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getAge(), actual.getAge());
+    }
+
+    @Test
+    public void createBean() throws Exception {
+        Bean bean1 = parser.createBean("singleton", "com.elgoooog.depin.test.Dog");
+        assertTrue(bean1 instanceof SingletonBean);
+
+        Bean bean2 = parser.createBean("blah", "com.elgoooog.depin.test.Dog");
+        assertTrue(bean2 instanceof PrototypeBean);
     }
 
     @Test
@@ -79,7 +83,7 @@ public class DepInDomParserTest {
         NodeList nodeList = new NodeListStub(nodes);
         Element element = new ElementStub(nodeList);
         Bean bean = new PrototypeBean(Dog.class);
-        parser.populateModel(element, bean);
+        parser.populateModel(element, bean, new Beans());
 
         List<Object> vals = bean.getArgs().getVals();
         assertEquals("Yoda", vals.get(0));

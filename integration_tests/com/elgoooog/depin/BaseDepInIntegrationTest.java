@@ -4,7 +4,7 @@ import com.elgoooog.depin.test.Animal;
 import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Cat;
 import com.elgoooog.depin.test.Dog;
-import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -14,14 +14,10 @@ import static org.junit.Assert.*;
  *         Date: 2/8/11
  *         Time: 12:18 AM
  */
-public class DepInIntegrationTest {
-    private DepIn depin;
 
-    @Before
-    public void getDepin() {
-        depin = DepIn.getInstance();
-        depin.loadConfiguration();
-    }
+@Ignore
+public class BaseDepInIntegrationTest {
+    protected DepIn depin;
 
     @Test
     public void testDefaultConstructor() throws Exception {

@@ -1,7 +1,7 @@
 package com.elgoooog.depin.parser;
 
+import com.elgoooog.depin.Beans;
 import com.elgoooog.depin.parser.model.Bean;
-import com.elgoooog.depin.parser.model.Beans;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,7 +17,7 @@ import java.io.InputStream;
  *         Time: 11:25 PM
  */
 public class DepInDomParser extends BaseDepInFileParser {
-    public void parseBeans(InputStream is) {
+    public void parseBeans(InputStream is, Beans beans) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -26,9 +26,9 @@ public class DepInDomParser extends BaseDepInFileParser {
             Element root = doc.getDocumentElement();
             root.normalize();
 
-            NodeList beans = root.getChildNodes();
-            for (int i = 0; i < beans.getLength(); ++i) {
-                Node node = beans.item(i);
+            NodeList theBeans = root.getChildNodes();
+            for (int i = 0; i < theBeans.getLength(); ++i) {
+                Node node = theBeans.item(i);
                 if (node instanceof Element) {
                     Element bean = (Element) node;
                     if ("bean".equals(bean.getNodeName())) {
@@ -37,12 +37,12 @@ public class DepInDomParser extends BaseDepInFileParser {
 
                         Bean beanModel = createBean(scope, classString);
 
-                        populateModel(bean, beanModel);
+                        populateModel(bean, beanModel, beans);
 
                         String id = bean.getAttribute("id");
                         if (id != null) {
                             beanModel.setId(id);
-                            Beans.addBean(id, beanModel);
+                            beans.addBean(id, beanModel);
                         }
                     }
                 }
@@ -53,7 +53,7 @@ public class DepInDomParser extends BaseDepInFileParser {
 
     }
 
-    protected void populateModel(Element bean, Bean beanModel) throws Exception {
+    protected void populateModel(Element bean, Bean beanModel, Beans beans) throws Exception {
         NodeList children = bean.getChildNodes();
 
         for (int i = 0; i < children.getLength(); ++i) {
@@ -65,7 +65,7 @@ public class DepInDomParser extends BaseDepInFileParser {
                 if (validArgNames.contains(nodeName)) {
                     updateBeanWithLiteralArg(beanModel, nodeName, val);
                 } else if ("ref".equals(nodeName)) {
-                    updateBeanWithRefArg(beanModel, val);
+                    updateBeanWithRefArg(beanModel, beans.getBean(val));
                 }
             }
         }

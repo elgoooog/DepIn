@@ -12,12 +12,10 @@ import static org.junit.Assert.assertEquals;
  *         Time: 4:07 PM
  */
 public class DepInTest {
-    private DepIn depIn = DepIn.getInstance();
-
     @Test
     public void loadConfigurationTest() throws Exception {
         System.setProperty("depinConfigurationFile", "config/depinTest.xml");
-        depIn.setFileLoader(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
 
         depIn.loadConfiguration();
         System.clearProperty("depinConfigurationFile");
@@ -36,19 +34,19 @@ public class DepInTest {
             line = reader.readLine();
         }
 
-        depIn.setFileLoader(new DepInFileLoaderStub(builder.toString().trim()));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(builder.toString().trim()));
         depIn.loadConfiguration();
     }
 
     @Test
     public void loadConfigurationTest_file() throws Exception {
-        depIn.setFileLoader(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
         depIn.loadConfiguration("config/depinTest.xml");
     }
 
     @Test
     public void loadConfigurationTest_inputStream() throws Exception {
-        depIn.setFileLoader(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
         depIn.loadConfiguration(new FileInputStream("config/depinTest.xml"));
     }
 
@@ -61,11 +59,12 @@ public class DepInTest {
         private String expected;
 
         private DepInFileLoaderStub(String e) {
+            super(null);
             expected = e;
         }
 
         @Override
-        public void load(InputStream is) {
+        public void load(InputStream is, Beans beans) {
             try {
                 int available = is.available();
                 byte[] bytes = new byte[available];
