@@ -66,7 +66,7 @@ public class DepInDomParserTest {
     }
 
     @Test
-    public void createBean() throws Exception {
+    public void createBeanTest() throws Exception {
         Bean bean1 = parser.createBean("singleton", "com.elgoooog.depin.test.Dog");
         assertTrue(bean1 instanceof SingletonBean);
 
@@ -75,7 +75,7 @@ public class DepInDomParserTest {
     }
 
     @Test
-    public void populateModel() throws Exception {
+    public void populateModelTest() throws Exception {
         Element e1 = new ElementStub("string", Collections.singletonMap("val", "Yoda"));
         Element e2 = new ElementStub("int", Collections.singletonMap("val", "99"));
 

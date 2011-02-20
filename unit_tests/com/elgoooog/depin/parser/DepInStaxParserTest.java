@@ -1,5 +1,6 @@
 package com.elgoooog.depin.parser;
 
+import com.elgoooog.depin.Beans;
 import com.elgoooog.depin.parser.model.Bean;
 import com.elgoooog.depin.parser.model.Literal;
 import com.elgoooog.depin.parser.model.PrototypeBean;
@@ -8,6 +9,11 @@ import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -60,11 +66,31 @@ public class DepInStaxParserTest {
     }
 
     @Test
-    public void createBean() throws Exception {
+    public void createBeanTest() throws Exception {
         Bean bean1 = parser.createBean("singleton", "com.elgoooog.depin.test.Dog");
         assertTrue(bean1 instanceof SingletonBean);
 
         Bean bean2 = parser.createBean("blah", "com.elgoooog.depin.test.Dog");
         assertTrue(bean2 instanceof PrototypeBean);
+    }
+
+    @Test
+    public void getArgHolderTest() throws Exception {
+        Map<Bean, List<DepInStaxParser.ArgHolder>> argHolders = new HashMap<Bean, List<DepInStaxParser.ArgHolder>>();
+        Bean beanPresent = new PrototypeBean("com.elgoooog.depin.test.Dog");
+        Bean beanAbsent = new PrototypeBean("com.elgoooog.depin.test.Dog");
+
+        List<DepInStaxParser.ArgHolder> presentArgHolder = new ArrayList<DepInStaxParser.ArgHolder>();
+        presentArgHolder.add(parser.new RefHolder("blah", new Beans()));
+        presentArgHolder.add(parser.new LiteralHolder("boom", "bam"));
+
+        argHolders.put(beanPresent, presentArgHolder);
+
+        List<DepInStaxParser.ArgHolder> actual1 = parser.getArgHolder(beanPresent, argHolders);
+        assertEquals(actual1, presentArgHolder);
+        assertEquals(2, actual1.size());
+
+        List<DepInStaxParser.ArgHolder> actual2 = parser.getArgHolder(beanAbsent, argHolders);
+        assertTrue(actual2.isEmpty());
     }
 }

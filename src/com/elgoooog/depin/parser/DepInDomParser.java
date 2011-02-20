@@ -27,6 +27,8 @@ public class DepInDomParser extends BaseDepInFileParser {
             root.normalize();
 
             NodeList theBeans = root.getChildNodes();
+
+            //first pass, gather all beans
             for (int i = 0; i < theBeans.getLength(); ++i) {
                 Node node = theBeans.item(i);
                 if (node instanceof Element) {
@@ -37,13 +39,21 @@ public class DepInDomParser extends BaseDepInFileParser {
 
                         Bean beanModel = createBean(scope, classString);
 
-                        populateModel(bean, beanModel, beans);
-
                         String id = bean.getAttribute("id");
-                        if (id != null) {
-                            beanModel.setId(id);
-                            beans.addBean(id, beanModel);
-                        }
+                        beanModel.setId(id);
+                        beans.addBean(id, beanModel);
+                    }
+                }
+            }
+
+            //setup arguments on second pass
+            for (int i = 0; i < theBeans.getLength(); ++i) {
+                Node node = theBeans.item(i);
+                if (node instanceof Element) {
+                    Element bean = (Element) node;
+                    if ("bean".equals(bean.getNodeName())) {
+                        Bean beanModel = beans.getBean(bean.getAttribute("id"));
+                        populateModel(bean, beanModel, beans);
                     }
                 }
             }

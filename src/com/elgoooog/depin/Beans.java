@@ -3,6 +3,7 @@ package com.elgoooog.depin;
 import com.elgoooog.depin.parser.model.Bean;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Map;
  *         Date: 2/17/11
  *         Time: 12:41 AM
  */
-public class Beans {
+public class Beans implements Iterable<Bean> {
     private Map<String, Bean> beanModel = new HashMap<String, Bean>();
 
     public void addBean(String id, Bean bean) {
@@ -19,5 +20,10 @@ public class Beans {
 
     public Bean getBean(String id) {
         return beanModel.get(id);
+    }
+
+    @Override
+    public Iterator<Bean> iterator() {
+        return beanModel.values().iterator();
     }
 }
