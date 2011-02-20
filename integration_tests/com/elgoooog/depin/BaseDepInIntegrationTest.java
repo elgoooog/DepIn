@@ -1,9 +1,6 @@
 package com.elgoooog.depin;
 
-import com.elgoooog.depin.test.Animal;
-import com.elgoooog.depin.test.Cage;
-import com.elgoooog.depin.test.Cat;
-import com.elgoooog.depin.test.Dog;
+import com.elgoooog.depin.test.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -21,12 +18,16 @@ public class BaseDepInIntegrationTest {
 
     @Test
     public void testDefaultConstructor() throws Exception {
+        depin.loadConfiguration();
+
         Animal animal = (Animal) depin.get("Animal");
         assertNotNull(animal);
     }
 
     @Test
     public void testConstructorWithPrimitive_val_1() throws Exception {
+        depin.loadConfiguration();
+
         Cat cat = (Cat) depin.get("Buff");
         assertNotNull(cat);
         assertEquals("Buff", cat.getName());
@@ -34,6 +35,8 @@ public class BaseDepInIntegrationTest {
 
     @Test
     public void testConstructorWithPrimitive_val_2() throws Exception {
+        depin.loadConfiguration();
+
         Dog dog = (Dog) depin.get("Fido");
         assertNotNull(dog);
         assertEquals("Fido", dog.getName());
@@ -42,6 +45,8 @@ public class BaseDepInIntegrationTest {
 
     @Test
     public void testConstructorWithPrimitive_vals() throws Exception {
+        depin.loadConfiguration();
+
         Dog dog = (Dog) depin.get("Rex");
         assertNotNull(dog);
         assertEquals("Rex", dog.getName());
@@ -50,6 +55,8 @@ public class BaseDepInIntegrationTest {
 
     @Test
     public void testConstructorWithRef() throws Exception {
+        depin.loadConfiguration();
+
         Cage cage = (Cage) depin.get("AnimalCage");
         assertNotNull(cage);
         assertEquals("animal", cage.getAnimal().getName());
@@ -58,6 +65,8 @@ public class BaseDepInIntegrationTest {
 
     @Test
     public void testConstructorWithRef_childType() throws Exception {
+        depin.loadConfiguration();
+
         Cage cage = (Cage) depin.get("DogCage");
         assertNotNull(cage);
         assertEquals("Fido", cage.getAnimal().getName());
@@ -66,6 +75,8 @@ public class BaseDepInIntegrationTest {
 
     @Test
     public void testPrototype() throws Exception {
+        depin.loadConfiguration();
+
         Animal animal1 = (Animal) depin.get("Animal");
         Animal animal2 = (Animal) depin.get("Animal");
 
@@ -74,9 +85,30 @@ public class BaseDepInIntegrationTest {
 
     @Test
     public void testSingleton() throws Exception {
+        depin.loadConfiguration();
+
         Animal animal1 = (Animal) depin.get("SingletonAnimal");
         Animal animal2 = (Animal) depin.get("SingletonAnimal");
 
         assertSame(animal1, animal2);
+    }
+
+    @Test
+    public void testBasicCycle() throws Exception {
+        depin.loadConfiguration("config/depinTest_cycle.xml");
+
+        Parent parent = (Parent) depin.get("testParent");
+        Child child = (Child) depin.get("testChild");
+
+        fail();
+    }
+
+    @Test
+    public void testUnorderedDefinition() throws Exception {
+        depin.loadConfiguration("config/depinTest_unorderedDefinition.xml");
+
+        Cage cage = (Cage) depin.get("Cage");
+        Animal animal = cage.getAnimal();
+        assertEquals("Floyd", animal.getName());
     }
 }

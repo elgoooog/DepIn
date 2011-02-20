@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<depin>
+    <bean id="testParent" class="com.elgoooog.depin.test.Parent">
+        <ref val="testChild"/>
+    </bean>
+
+    <bean id="testChild" class="com.elgoooog.depin.test.Child">
+        <ref val="testParent"/>
+    </bean>
+</depin>

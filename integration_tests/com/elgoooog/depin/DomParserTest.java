@@ -12,6 +12,5 @@ public class DomParserTest extends BaseDepInIntegrationTest {
     @Before
     public void initDomParser() throws Exception {
         depin = new DepIn(new DepInFileLoader(new DepInDomParser()));
-        depin.loadConfiguration();
     }
 }

@@ -1,6 +1,7 @@
 package com.elgoooog.depin;
 
 import com.elgoooog.depin.parser.DepInFileParser;
+import com.elgoooog.depin.parser.DepInStaxParser;
 
 import java.io.InputStream;
 
@@ -17,6 +18,10 @@ public class DepInFileLoader {
 
     DepInFileLoader(DepInFileParser p) {
         parser = p;
+    }
+
+    DepInFileLoader() {
+        this(new DepInStaxParser());
     }
 
     protected void load(InputStream is, Beans beans) {

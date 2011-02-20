@@ -12,6 +12,5 @@ public class StaxParserTest extends BaseDepInIntegrationTest {
     @Before
     public void initStaxParser() throws Exception {
         depin = new DepIn(new DepInFileLoader(new DepInStaxParser()));
-        depin.loadConfiguration();
     }
 }

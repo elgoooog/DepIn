@@ -23,6 +23,10 @@ public class DepIn {
         beans = new Beans();
     }
 
+    public DepIn() {
+        this(new DepInFileLoader());
+    }
+
     public Object get(String id) {
         Bean bean = beans.getBean(id);
         if(bean == null) {

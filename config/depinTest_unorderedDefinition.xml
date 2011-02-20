@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<depin>
+    <bean id="Cage" class="com.elgoooog.depin.test.Cage">
+        <ref val="Dog"/>
+    </bean>
+
+    <bean id="Dog" class="com.elgoooog.depin.test.Dog">
+        <string val="Floyd"/>
+        <int val="33"/>
+    </bean>
+</depin>
