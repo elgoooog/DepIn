@@ -1,5 +1,7 @@
 package com.elgoooog.depin.parser.model;
 
+import java.util.Set;
+
 /**
  * @author Nicholas Hauschild
  *         Date: 2/17/11
@@ -17,4 +19,6 @@ public interface Bean {
     Args getArgs();
 
     Object getInstance();
+
+    Set<Bean> getDependants();
 }

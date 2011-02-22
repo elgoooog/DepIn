@@ -1,5 +1,6 @@
 package com.elgoooog.depin;
 
+import com.elgoooog.depin.exception.CycleException;
 import com.elgoooog.depin.test.*;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -93,12 +94,20 @@ public class BaseDepInIntegrationTest {
         assertSame(animal1, animal2);
     }
 
-    @Test
-    public void testBasicCycle() throws Exception {
+    @Test(expected = CycleException.class)
+    public void testTwoCycle() throws Exception {
         depin.loadConfiguration("config/depinTest_cycle.xml");
 
-        Parent parent = (Parent) depin.get("testParent");
-        Child child = (Child) depin.get("testChild");
+        depin.get("testParent");
+
+        fail();
+    }
+
+    @Test(expected = CycleException.class)
+    public void testThreeCycle() throws Exception {
+        depin.loadConfiguration("config/depinTest_cycle.xml");
+
+        depin.get("testA");
 
         fail();
     }

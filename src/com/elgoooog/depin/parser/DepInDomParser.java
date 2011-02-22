@@ -18,52 +18,52 @@ import java.io.InputStream;
  */
 public class DepInDomParser extends BaseDepInFileParser {
     public void parseBeans(InputStream is, Beans beans) {
+        Document doc;
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(is);
-
-            Element root = doc.getDocumentElement();
-            root.normalize();
-
-            NodeList theBeans = root.getChildNodes();
-
-            //first pass, gather all beans
-            for (int i = 0; i < theBeans.getLength(); ++i) {
-                Node node = theBeans.item(i);
-                if (node instanceof Element) {
-                    Element bean = (Element) node;
-                    if ("bean".equals(bean.getNodeName())) {
-                        String classString = bean.getAttribute("class");
-                        String scope = bean.getAttribute("scope");
-
-                        Bean beanModel = createBean(scope, classString);
-
-                        String id = bean.getAttribute("id");
-                        beanModel.setId(id);
-                        beans.addBean(id, beanModel);
-                    }
-                }
-            }
-
-            //setup arguments on second pass
-            for (int i = 0; i < theBeans.getLength(); ++i) {
-                Node node = theBeans.item(i);
-                if (node instanceof Element) {
-                    Element bean = (Element) node;
-                    if ("bean".equals(bean.getNodeName())) {
-                        Bean beanModel = beans.getBean(bean.getAttribute("id"));
-                        populateModel(bean, beanModel, beans);
-                    }
-                }
-            }
+            doc = dBuilder.parse(is);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        Element root = doc.getDocumentElement();
+        root.normalize();
+
+        NodeList theBeans = root.getChildNodes();
+
+        //first pass, gather all beans
+        for (int i = 0; i < theBeans.getLength(); ++i) {
+            Node node = theBeans.item(i);
+            if (node instanceof Element) {
+                Element bean = (Element) node;
+                if ("bean".equals(bean.getNodeName())) {
+                    String classString = bean.getAttribute("class");
+                    String scope = bean.getAttribute("scope");
+
+                    Bean beanModel = createBean(scope, classString);
+
+                    String id = bean.getAttribute("id");
+                    beanModel.setId(id);
+                    beans.addBean(id, beanModel);
+                }
+            }
+        }
+
+        //setup arguments on second pass
+        for (int i = 0; i < theBeans.getLength(); ++i) {
+            Node node = theBeans.item(i);
+            if (node instanceof Element) {
+                Element bean = (Element) node;
+                if ("bean".equals(bean.getNodeName())) {
+                    Bean beanModel = beans.getBean(bean.getAttribute("id"));
+                    populateModel(bean, beanModel, beans);
+                }
+            }
+        }
     }
 
-    protected void populateModel(Element bean, Bean beanModel, Beans beans) throws Exception {
+    protected void populateModel(Element bean, Bean beanModel, Beans beans) {
         NodeList children = bean.getChildNodes();
 
         for (int i = 0; i < children.getLength(); ++i) {

@@ -16,7 +16,7 @@ public class PrototypeBeanTest {
 
     @Before
     public void setup() throws Exception {
-        bean = new PrototypeBean(Dog.class);
+        bean = new PrototypeBean("com.elgoooog.depin.test.Dog");
         bean.setId("test--DogPrototype");
         bean.addArg(new Literal("fido"));
         bean.addArg(new Literal(int.class, 7));

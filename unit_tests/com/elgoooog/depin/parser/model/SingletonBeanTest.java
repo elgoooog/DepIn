@@ -16,7 +16,7 @@ public class SingletonBeanTest {
 
     @Before
     public void setup() throws Exception {
-        bean = new SingletonBean(Dog.class);
+        bean = new SingletonBean("com.elgoooog.depin.test.Dog");
         bean.setId("test--DogSingleton");
         bean.addArg(new Literal("fido"));
         bean.addArg(new Literal(int.class, 7));

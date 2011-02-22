@@ -1,5 +1,7 @@
 package com.elgoooog.depin.parser.model;
 
+import java.util.Set;
+
 /**
  * @author Nicholas Hauschild
  *         Date: 2/17/11
@@ -26,5 +28,10 @@ public class Literal implements Arg {
     @Override
     public Object getValue() {
         return value;
+    }
+
+    @Override
+    public void updateDependants(Set<Bean> dependants) {
+        //
     }
 }

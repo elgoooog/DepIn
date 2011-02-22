@@ -7,4 +7,17 @@
     <bean id="testChild" class="com.elgoooog.depin.test.Child">
         <ref val="testParent"/>
     </bean>
+
+
+    <bean id="testA" class="com.elgoooog.depin.test.Aaa">
+        <ref val="testB"/>
+    </bean>
+
+    <bean id="testB" class="com.elgoooog.depin.test.Bbb">
+        <ref val="testC"/>
+    </bean>
+
+    <bean id="testC" class="com.elgoooog.depin.test.Ccc">
+        <ref val="testA"/>
+    </bean>
 </depin>

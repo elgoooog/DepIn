@@ -16,10 +16,6 @@ public class SingletonBean extends BaseBean {
         super(clazz);
     }
 
-    public SingletonBean(Class<?> clazz) {
-        super(clazz);
-    }
-
     @Override
     public Object getInstance() {
         if (instance != null) {

@@ -16,10 +16,6 @@ public class PrototypeBean extends BaseBean {
         super(clazz);
     }
 
-    public PrototypeBean(Class<?> clazz) {
-        super(clazz);
-    }
-
     @Override
     public Object getInstance() {
         if (constructor == null) {

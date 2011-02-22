@@ -5,7 +5,6 @@ import com.elgoooog.depin.parser.model.Bean;
 import com.elgoooog.depin.parser.model.Literal;
 import com.elgoooog.depin.parser.model.PrototypeBean;
 import com.elgoooog.depin.parser.model.SingletonBean;
-import com.elgoooog.depin.test.Cage;
 import com.elgoooog.depin.test.Dog;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +32,7 @@ public class DepInStaxParserTest {
 
     @Test
     public void updateBeanWithLiteralArgTest() throws Exception {
-        Bean bean = new PrototypeBean(Dog.class);
+        Bean bean = new PrototypeBean("com.elgoooog.depin.test.Dog");
         bean.setId("test--Dog");
 
         parser.updateBeanWithLiteralArg(bean, "string", "bob");
@@ -48,10 +47,10 @@ public class DepInStaxParserTest {
 
     @Test
     public void updateBeanWithRefArgTest() throws Exception {
-        Bean cageBean = new PrototypeBean(Cage.class);
+        Bean cageBean = new PrototypeBean("com.elgoooog.depin.test.Cage");
         cageBean.setId("test--Cage");
 
-        Bean fidoBean = new PrototypeBean(Dog.class);
+        Bean fidoBean = new PrototypeBean("com.elgoooog.depin.test.Dog");
         fidoBean.setId("test--Fido");
         fidoBean.addArg(new Literal("fido"));
         fidoBean.addArg(new Literal(int.class, 7));
