@@ -9,7 +9,7 @@ import java.util.List;
  *         Time: 11:54 PM
  */
 public class ConstructorUtil {
-    public static Constructor<?> findProperConstructor(Class<?> clazz, List<Class<?>> types) throws NoSuchMethodException {
+    public static Constructor<?> findProperConstructor(Class<?> clazz, List<Class<?>> types) {
         Constructor<?>[] constructors = clazz.getConstructors();
 
         for (Constructor<?> constructor : constructors) {
