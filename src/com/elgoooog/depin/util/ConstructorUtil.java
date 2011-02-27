@@ -1,4 +1,4 @@
-package com.elgoooog.depin.parser.util;
+package com.elgoooog.depin.util;
 
 import java.lang.reflect.Constructor;
 import java.util.List;

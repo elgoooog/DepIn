@@ -1,6 +1,6 @@
 package com.elgoooog.depin.parser;
 
-import com.elgoooog.depin.parser.model.*;
+import com.elgoooog.depin.model.*;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.elgoooog.depin.parser.model;
+package com.elgoooog.depin.model;
 
 import java.util.Set;
 
@@ -21,4 +21,6 @@ public interface Bean {
     Object getInstance();
 
     Set<Bean> getDependants();
+
+    void addInjectedField(InjectedField field);
 }

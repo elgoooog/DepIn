@@ -1,7 +1,14 @@
 package com.elgoooog.depin;
 
 import com.elgoooog.depin.exception.CycleException;
-import com.elgoooog.depin.test.*;
+import com.elgoooog.depin.test.inject.Brain;
+import com.elgoooog.depin.test.inject.Fridge;
+import com.elgoooog.depin.test.inject.Kitchen;
+import com.elgoooog.depin.test.inject.Skull;
+import com.elgoooog.depin.test.zoo.Cage;
+import com.elgoooog.depin.test.zoo.animal.Animal;
+import com.elgoooog.depin.test.zoo.animal.Cat;
+import com.elgoooog.depin.test.zoo.animal.Dog;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -119,5 +126,38 @@ public class BaseDepInIntegrationTest {
         Cage cage = (Cage) depin.get("Cage");
         Animal animal = cage.getAnimal();
         assertEquals("Floyd", animal.getName());
+    }
+
+    @Test
+    public void testInject() throws Exception {
+        depin.loadConfiguration("config/depinTest_inject.xml");
+
+        Skull skull = (Skull) depin.get("Skull");
+        Brain brain = skull.getBrain();
+        assertNotNull(brain);
+    }
+
+    @Test
+    public void testInject_prototype() throws Exception {
+        depin.loadConfiguration("config/depinTest_inject.xml");
+
+        Skull skull = (Skull) depin.get("Skull");
+        Brain notExpected = (Brain) depin.get("Brain");
+        Brain brain = skull.getBrain();
+        assertNotNull(brain);
+        assertEquals(notExpected.getBrainPower(), brain.getBrainPower());
+        assertNotSame(notExpected, brain);
+    }
+
+    @Test
+    public void testInject_singleton() throws Exception {
+        depin.loadConfiguration("config/depinTest_inject.xml");
+
+        Kitchen kitchen = (Kitchen) depin.get("Kitchen");
+        Fridge expected = (Fridge) depin.get("Fridge");
+        Fridge fridge = kitchen.getFridge();
+        assertNotNull(fridge);
+        assertEquals(expected.getFoodCount(), fridge.getFoodCount());
+        assertNotSame(expected, fridge);
     }
 }

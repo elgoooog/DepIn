@@ -1,6 +1,8 @@
 package com.elgoooog.depin;
 
-import com.elgoooog.depin.parser.model.Bean;
+import com.elgoooog.depin.inject.BeanInjector;
+import com.elgoooog.depin.inject.DepInInjector;
+import com.elgoooog.depin.model.Bean;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,21 +18,23 @@ import java.io.InputStream;
  */
 public class DepIn {
     private DepInFileLoader fileLoader;
+    private DepInInjector injector;
     private Beans beans;
 
-    public DepIn(DepInFileLoader loader) {
+    public DepIn(DepInFileLoader loader, DepInInjector beanInjector) {
         fileLoader = loader;
+        injector = beanInjector;
         beans = new Beans();
     }
 
     public DepIn() {
-        this(new DepInFileLoader());
+        this(new DepInFileLoader(), new BeanInjector());
     }
 
     public Object get(String id) {
         Bean bean = beans.getBean(id);
         if(bean == null) {
-            throw new RuntimeException("No such bean in configuration: " + id);
+            throw new RuntimeException("No such bean (" + id + ") in configuration");
         }
 
         return bean.getInstance();
@@ -60,5 +64,6 @@ public class DepIn {
 
     public void loadConfiguration(InputStream is) {
         fileLoader.load(is, beans);
+        injector.inject(beans);
     }
 }

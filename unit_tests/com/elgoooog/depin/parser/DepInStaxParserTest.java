@@ -1,11 +1,11 @@
 package com.elgoooog.depin.parser;
 
 import com.elgoooog.depin.Beans;
-import com.elgoooog.depin.parser.model.Bean;
-import com.elgoooog.depin.parser.model.Literal;
-import com.elgoooog.depin.parser.model.PrototypeBean;
-import com.elgoooog.depin.parser.model.SingletonBean;
-import com.elgoooog.depin.test.Dog;
+import com.elgoooog.depin.model.Bean;
+import com.elgoooog.depin.model.PrototypeBean;
+import com.elgoooog.depin.model.Literal;
+import com.elgoooog.depin.model.SingletonBean;
+import com.elgoooog.depin.test.zoo.animal.Dog;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ public class DepInStaxParserTest {
 
     @Test
     public void updateBeanWithLiteralArgTest() throws Exception {
-        Bean bean = new PrototypeBean("com.elgoooog.depin.test.Dog");
+        Bean bean = new PrototypeBean("com.elgoooog.depin.test.zoo.animal.Dog");
         bean.setId("test--Dog");
 
         parser.updateBeanWithLiteralArg(bean, "string", "bob");
@@ -47,10 +47,10 @@ public class DepInStaxParserTest {
 
     @Test
     public void updateBeanWithRefArgTest() throws Exception {
-        Bean cageBean = new PrototypeBean("com.elgoooog.depin.test.Cage");
+        Bean cageBean = new PrototypeBean("com.elgoooog.depin.test.zoo.Cage");
         cageBean.setId("test--Cage");
 
-        Bean fidoBean = new PrototypeBean("com.elgoooog.depin.test.Dog");
+        Bean fidoBean = new PrototypeBean("com.elgoooog.depin.test.zoo.animal.Dog");
         fidoBean.setId("test--Fido");
         fidoBean.addArg(new Literal("fido"));
         fidoBean.addArg(new Literal(int.class, 7));
@@ -66,18 +66,18 @@ public class DepInStaxParserTest {
 
     @Test
     public void createBeanTest() throws Exception {
-        Bean bean1 = parser.createBean("singleton", "com.elgoooog.depin.test.Dog");
+        Bean bean1 = parser.createBean("singleton", "com.elgoooog.depin.test.zoo.animal.Dog");
         assertTrue(bean1 instanceof SingletonBean);
 
-        Bean bean2 = parser.createBean("blah", "com.elgoooog.depin.test.Dog");
+        Bean bean2 = parser.createBean("blah", "com.elgoooog.depin.test.zoo.animal.Dog");
         assertTrue(bean2 instanceof PrototypeBean);
     }
 
     @Test
     public void getArgHolderTest() throws Exception {
         Map<Bean, List<DepInStaxParser.ArgHolder>> argHolders = new HashMap<Bean, List<DepInStaxParser.ArgHolder>>();
-        Bean beanPresent = new PrototypeBean("com.elgoooog.depin.test.Dog");
-        Bean beanAbsent = new PrototypeBean("com.elgoooog.depin.test.Dog");
+        Bean beanPresent = new PrototypeBean("com.elgoooog.depin.test.zoo.animal.Dog");
+        Bean beanAbsent = new PrototypeBean("com.elgoooog.depin.test.zoo.animal.Dog");
 
         List<DepInStaxParser.ArgHolder> presentArgHolder = new ArrayList<DepInStaxParser.ArgHolder>();
         presentArgHolder.add(parser.new RefHolder("blah", new Beans()));

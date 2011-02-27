@@ -1,4 +1,4 @@
-package com.elgoooog.depin.parser.model;
+package com.elgoooog.depin.model;
 
 import java.util.Set;
 

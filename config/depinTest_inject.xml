@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<depin>
+    <bean id="Skull" class="com.elgoooog.depin.test.inject.Skull"/>
+
+    <bean id="Brain" class="com.elgoooog.depin.test.inject.Brain">
+        <int val="100"/>
+    </bean>
+
+    <bean id="Kitchen" class="com.elgoooog.depin.test.inject.Kitchen"/>
+
+    <bean id="Fridge" class="com.elgoooog.depin.test.inject.Fridge">
+        <int val="3"/>
+    </bean>
+</depin>

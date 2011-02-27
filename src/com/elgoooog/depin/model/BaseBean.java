@@ -1,7 +1,10 @@
-package com.elgoooog.depin.parser.model;
+package com.elgoooog.depin.model;
 
-import com.elgoooog.depin.parser.util.CycleChecker;
+import com.elgoooog.depin.util.CycleChecker;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,12 +17,14 @@ public abstract class BaseBean implements Bean {
     private String id;
     private Args args;
     private CycleChecker cycleChecker;
+    private List<InjectedField> injectedFields;
 
     public BaseBean(String className) {
         try {
             clazz = Class.forName(className);
             args = new Args();
             cycleChecker = new CycleChecker(this);
+            injectedFields = new ArrayList<InjectedField>();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -47,11 +52,30 @@ public abstract class BaseBean implements Bean {
     }
 
     @Override
+    public void addInjectedField(InjectedField field) {
+        injectedFields.add(field);
+    }
+
+    @Override
     public Args getArgs() {
         return args;
     }
 
     public Set<Bean> getDependants() {
         return cycleChecker.getDependants();
+    }
+
+    protected Object createInstance(Constructor<?> constructor) {
+        try {
+            Object instance = constructor.newInstance(getArgs().getVals().toArray());
+
+            for(InjectedField injectedField : injectedFields) {
+                injectedField.injectInto(instance);
+            }
+
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

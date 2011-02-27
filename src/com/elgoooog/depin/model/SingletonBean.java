@@ -1,6 +1,6 @@
-package com.elgoooog.depin.parser.model;
+package com.elgoooog.depin.model;
 
-import com.elgoooog.depin.parser.util.ConstructorUtil;
+import com.elgoooog.depin.util.ConstructorUtil;
 
 import java.lang.reflect.Constructor;
 
@@ -18,17 +18,12 @@ public class SingletonBean extends BaseBean {
 
     @Override
     public Object getInstance() {
-        if (instance != null) {
-            return instance;
-        }
-
-        try {
+        if (instance == null) {
             System.out.println("Creating singleton " + getId() + " (" + getBeanClass() + ")");
             Constructor<?> constructor = ConstructorUtil.findProperConstructor(getBeanClass(), getArgs().getTypes());
-            instance = constructor.newInstance(getArgs().getVals().toArray());
-            return instance;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            instance = createInstance(constructor);
         }
+
+        return instance;
     }
 }

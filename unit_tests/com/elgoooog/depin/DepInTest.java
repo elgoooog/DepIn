@@ -1,5 +1,6 @@
 package com.elgoooog.depin;
 
+import com.elgoooog.depin.inject.BeanInjector;
 import org.junit.Test;
 
 import java.io.*;
@@ -15,7 +16,7 @@ public class DepInTest {
     @Test
     public void loadConfigurationTest() throws Exception {
         System.setProperty("depinConfigurationFile", "config/depinTest.xml");
-        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED), new BeanInjector());
 
         depIn.loadConfiguration();
         System.clearProperty("depinConfigurationFile");
@@ -34,25 +35,25 @@ public class DepInTest {
             line = reader.readLine();
         }
 
-        DepIn depIn = new DepIn(new DepInFileLoaderStub(builder.toString().trim()));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(builder.toString().trim()), new BeanInjector());
         depIn.loadConfiguration();
     }
 
     @Test
     public void loadConfigurationTest_file() throws Exception {
-        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED), new BeanInjector());
         depIn.loadConfiguration("config/depinTest.xml");
     }
 
     @Test
     public void loadConfigurationTest_inputStream() throws Exception {
-        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED));
+        DepIn depIn = new DepIn(new DepInFileLoaderStub(UNIT_TEST_EXPECTED), new BeanInjector());
         depIn.loadConfiguration(new FileInputStream("config/depinTest.xml"));
     }
 
     private static final String UNIT_TEST_EXPECTED = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
             "<depin>\r\n" +
-            "    <bean id=\"testAnimal\" class=\"com.elgoooog.depin.test.Animal\"/>\r\n" +
+            "    <bean id=\"testAnimal\" class=\"com.elgoooog.depin.test.zoo.animal.Animal\"/>\r\n" +
             "</depin>";
 
     private class DepInFileLoaderStub extends DepInFileLoader {

@@ -1,6 +1,6 @@
 package com.elgoooog.depin;
 
-import com.elgoooog.depin.parser.model.Bean;
+import com.elgoooog.depin.model.Bean;
 
 import java.util.HashMap;
 import java.util.Iterator;

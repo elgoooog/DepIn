@@ -1,7 +1,7 @@
 package com.elgoooog.depin.parser;
 
 import com.elgoooog.depin.Beans;
-import com.elgoooog.depin.parser.model.Bean;
+import com.elgoooog.depin.model.Bean;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

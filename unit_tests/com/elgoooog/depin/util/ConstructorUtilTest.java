@@ -1,8 +1,9 @@
-package com.elgoooog.depin.parser.util;
+package com.elgoooog.depin.util;
 
-import com.elgoooog.depin.test.Animal;
-import com.elgoooog.depin.test.Cage;
-import com.elgoooog.depin.test.Dog;
+import com.elgoooog.depin.test.zoo.animal.Animal;
+import com.elgoooog.depin.test.zoo.Cage;
+import com.elgoooog.depin.test.zoo.animal.Dog;
+import com.elgoooog.depin.util.ConstructorUtil;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;

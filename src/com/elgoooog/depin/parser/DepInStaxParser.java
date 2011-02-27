@@ -1,7 +1,7 @@
 package com.elgoooog.depin.parser;
 
 import com.elgoooog.depin.Beans;
-import com.elgoooog.depin.parser.model.Bean;
+import com.elgoooog.depin.model.Bean;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;

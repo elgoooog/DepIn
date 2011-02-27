@@ -1,4 +1,4 @@
-package com.elgoooog.depin.test;
+package com.elgoooog.depin.test.zoo.animal;
 
 /**
  * @author Nicholas Hauschild

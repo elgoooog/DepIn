@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <depin>
-    <bean id="Animal" class="com.elgoooog.depin.test.Animal"/>
+    <bean id="Animal" class="com.elgoooog.depin.test.zoo.animal.Animal"/>
 
-    <bean id="Buff" class="com.elgoooog.depin.test.Cat">
+    <bean id="Buff" class="com.elgoooog.depin.test.zoo.animal.Cat">
         <string val="Buff"/>
     </bean>
 
-    <bean id="Fido" class="com.elgoooog.depin.test.Dog">
+    <bean id="Fido" class="com.elgoooog.depin.test.zoo.animal.Dog">
         <string val="Fido"/>
     </bean>
 
-    <bean id="Rex" class="com.elgoooog.depin.test.Dog">
+    <bean id="Rex" class="com.elgoooog.depin.test.zoo.animal.Dog">
         <string val="Rex"/>
         <int val="7"/>
     </bean>
 
-    <bean id="AnimalCage" class="com.elgoooog.depin.test.Cage">
+    <bean id="AnimalCage" class="com.elgoooog.depin.test.zoo.Cage">
         <ref val="Animal"/>
     </bean>
 
-    <bean id="DogCage" class="com.elgoooog.depin.test.Cage">
+    <bean id="DogCage" class="com.elgoooog.depin.test.zoo.Cage">
         <ref val="Fido"/>
     </bean>
 
-    <bean id="SingletonAnimal" class="com.elgoooog.depin.test.Animal" scope="singleton"/>
+    <bean id="SingletonAnimal" class="com.elgoooog.depin.test.zoo.animal.Animal" scope="singleton"/>
 </depin>
