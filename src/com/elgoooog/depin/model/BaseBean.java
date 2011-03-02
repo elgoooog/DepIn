@@ -18,6 +18,7 @@ public abstract class BaseBean implements Bean {
     private Args args;
     private CycleChecker cycleChecker;
     private List<InjectedField> injectedFields;
+    private List<Property> properties;
 
     public BaseBean(String className) {
         try {
@@ -25,6 +26,7 @@ public abstract class BaseBean implements Bean {
             args = new Args();
             cycleChecker = new CycleChecker(this);
             injectedFields = new ArrayList<InjectedField>();
+            properties = new ArrayList<Property>();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -57,6 +59,11 @@ public abstract class BaseBean implements Bean {
     }
 
     @Override
+    public void addProperty(Property p) {
+        properties.add(p);
+    }
+
+    @Override
     public Args getArgs() {
         return args;
     }
@@ -68,6 +75,10 @@ public abstract class BaseBean implements Bean {
     protected Object createInstance(Constructor<?> constructor) {
         try {
             Object instance = constructor.newInstance(getArgs().getVals().toArray());
+
+            for(Property property : properties) {
+                property.setOn(instance);
+            }
 
             for(InjectedField injectedField : injectedFields) {
                 injectedField.injectInto(instance);

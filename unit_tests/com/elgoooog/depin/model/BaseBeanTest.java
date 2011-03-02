@@ -19,20 +19,54 @@ public class BaseBeanTest {
 
     @Before
     public void setup() throws Exception {
+        InjectedFieldStub.clearCount();
+        PropertyStub.clearCount();
         bean = new PrototypeBean("com.elgoooog.depin.test.inject.Skull");
     }
 
     @Test
-    public void createInstanceTest() throws Exception {
+    public void createInstanceTest_injectedFields() throws Exception {
         Constructor<Skull> constructor = Skull.class.getConstructor();
 
         bean.addInjectedField(new InjectedFieldStub());
         bean.addInjectedField(new InjectedFieldStub());
 
         assertEquals(0, InjectedFieldStub.getCallCount());
+        assertEquals(0, PropertyStub.getCallCount());
         Skull skull = (Skull) bean.createInstance(constructor);
         assertNotNull(skull);
         assertEquals(2, InjectedFieldStub.getCallCount());
+        assertEquals(0, PropertyStub.getCallCount());
+    }
+
+    @Test
+    public void createInstanceTest_properties() throws Exception {
+        Constructor<Skull> constructor = Skull.class.getConstructor();
+
+        bean.addProperty(new PropertyStub());
+        bean.addProperty(new PropertyStub());
+
+        assertEquals(0, InjectedFieldStub.getCallCount());
+        assertEquals(0, PropertyStub.getCallCount());
+        Skull skull = (Skull) bean.createInstance(constructor);
+        assertNotNull(skull);
+        assertEquals(0, InjectedFieldStub.getCallCount());
+        assertEquals(2, PropertyStub.getCallCount());
+    }
+
+    @Test
+    public void createInstanceTest_wholeEnchilada() throws Exception {
+        Constructor<Skull> constructor = Skull.class.getConstructor();
+
+        bean.addInjectedField(new InjectedFieldStub());
+        bean.addProperty(new PropertyStub());
+
+        assertEquals(0, InjectedFieldStub.getCallCount());
+        assertEquals(0, PropertyStub.getCallCount());
+        Skull skull = (Skull) bean.createInstance(constructor);
+        assertNotNull(skull);
+        assertEquals(1, InjectedFieldStub.getCallCount());
+        assertEquals(1, PropertyStub.getCallCount());
     }
 
     private static class InjectedFieldStub extends InjectedField {
@@ -42,12 +76,38 @@ public class BaseBeanTest {
             super(null, null);
         }
 
+        @Override
         public void injectInto(Object o) {
             ++count;
         }
 
         public static int getCallCount() {
             return count;
+        }
+
+        public static void clearCount() {
+            count = 0;
+        }
+    }
+
+    private static class PropertyStub extends Property {
+        private static int count = 0;
+
+        public PropertyStub() {
+            super("stub", null);
+        }
+
+        @Override
+        public void setOn(Object o) {
+            ++count;
+        }
+
+        public static int getCallCount() {
+            return count;
+        }
+
+        public static void clearCount() {
+            count = 0;
         }
     }
 }

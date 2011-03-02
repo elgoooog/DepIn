@@ -23,4 +23,6 @@ public interface Bean {
     Set<Bean> getDependants();
 
     void addInjectedField(InjectedField field);
+
+    void addProperty(Property p);
 }

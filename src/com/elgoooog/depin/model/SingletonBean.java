@@ -1,6 +1,6 @@
 package com.elgoooog.depin.model;
 
-import com.elgoooog.depin.util.ConstructorUtil;
+import com.elgoooog.depin.util.AccessibleObjectUtil;
 
 import java.lang.reflect.Constructor;
 
@@ -20,7 +20,7 @@ public class SingletonBean extends BaseBean {
     public Object getInstance() {
         if (instance == null) {
             System.out.println("Creating singleton " + getId() + " (" + getBeanClass() + ")");
-            Constructor<?> constructor = ConstructorUtil.findProperConstructor(getBeanClass(), getArgs().getTypes());
+            Constructor<?> constructor = AccessibleObjectUtil.findProperConstructor(getBeanClass(), getArgs().getTypes());
             instance = createInstance(constructor);
         }
 

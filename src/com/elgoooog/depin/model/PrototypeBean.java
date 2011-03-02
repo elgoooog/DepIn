@@ -1,6 +1,6 @@
 package com.elgoooog.depin.model;
 
-import com.elgoooog.depin.util.ConstructorUtil;
+import com.elgoooog.depin.util.AccessibleObjectUtil;
 
 import java.lang.reflect.Constructor;
 
@@ -19,7 +19,7 @@ public class PrototypeBean extends BaseBean {
     @Override
     public Object getInstance() {
         if (constructor == null) {
-            constructor = ConstructorUtil.findProperConstructor(getBeanClass(), getArgs().getTypes());
+            constructor = AccessibleObjectUtil.findProperConstructor(getBeanClass(), getArgs().getTypes());
         }
 
         System.out.println("Creating prototype " + getId() + " (" + getBeanClass() + ")");
