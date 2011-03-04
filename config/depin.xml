@@ -24,4 +24,13 @@
     </bean>
 
     <bean id="SingletonAnimal" class="com.elgoooog.depin.test.zoo.animal.Animal" scope="singleton"/>
+
+    <bean id="PropertyDog" class="com.elgoooog.depin.test.zoo.animal.Dog">
+        <string val="pup"/>
+        <property name="age" primitive="int" val="30"/>
+    </bean>
+
+    <bean id="PropertyCage" class="com.elgoooog.depin.test.zoo.Cage">
+        <property name="animal" val="Buff"/>
+    </bean>
 </depin>

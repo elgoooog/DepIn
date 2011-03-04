@@ -94,7 +94,7 @@ public class BaseBeanTest {
         private static int count = 0;
 
         public PropertyStub() {
-            super("stub", null);
+            super(void.class, "stub", null);
         }
 
         @Override

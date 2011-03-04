@@ -160,4 +160,27 @@ public class BaseDepInIntegrationTest {
         assertEquals(expected.getFoodCount(), fridge.getFoodCount());
         assertNotSame(expected, fridge);
     }
+
+    @Test
+    public void propertyTest_literal() throws Exception {
+        depin.loadConfiguration();
+
+        Dog dog = (Dog) depin.get("PropertyDog");
+
+        assertNotNull(dog);
+        assertEquals("pup", dog.getName());
+        assertEquals(30, dog.getAge());
+    }
+
+    @Test
+    public void propertyTest_ref() throws Exception {
+        depin.loadConfiguration();
+
+        Cage cage = (Cage) depin.get("PropertyCage");
+
+        assertNotNull(cage);
+        assertNotNull(cage.getAnimal());
+        assertEquals(Cat.class, cage.getAnimal().getClass());
+        assertEquals("Buff", cage.getAnimal().getName());
+    }
 }

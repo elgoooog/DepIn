@@ -76,6 +76,14 @@ public class DepInDomParser extends BaseDepInFileParser {
                     updateBeanWithLiteralArg(beanModel, nodeName, val);
                 } else if ("ref".equals(nodeName)) {
                     updateBeanWithRefArg(beanModel, beans.getBean(val));
+                } else if("property".equals(nodeName)) {
+                    String primitive = child.getAttribute("primitive");
+                    String name = child.getAttribute("name");
+                    if(primitive != null && primitive.length() != 0) {
+                        updateBeanWithLiteralProperty(beanModel, primitive, name, val);
+                    } else {
+                        updateBeanWithRefProperty(beanModel, name, beans.getBean(val));
+                    }
                 }
             }
         }

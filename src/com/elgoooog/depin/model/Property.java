@@ -13,32 +13,49 @@ import java.util.Collections;
 public class Property {
     private String setterName;
     private String getterName;
-    private Bean ref;
+    private Arg arg;
+    private Class<?> clazz;
+    private Method setterMethod;
+    private Method getterMethod;
 
-    public Property(String n, Bean r) {
+    public Property(Class<?> c, String n, Arg a) {
         String base = Character.toUpperCase(n.charAt(0)) + n.substring(1);
         setterName = "set" + base;
         getterName = "get" + base;
-        ref = r;
+        arg = a;
+        clazz = c;
     }
 
     public void setOn(Object instance) {
+        checkType(instance.getClass());
         try {
-            Method method = AccessibleObjectUtil.findProperMethod(instance.getClass(),
-                    Collections.<Class<?>>singletonList(ref.getBeanClass()), setterName);
-            method.invoke(instance, ref.getInstance());
+            if(setterMethod == null) {
+                setterMethod = AccessibleObjectUtil.findProperMethod(clazz,
+                    Collections.<Class<?>>singletonList(arg.getType()), setterName);
+            }
+            setterMethod.invoke(instance, arg.getValue());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public Object getFrom(Object instance) {
+        checkType(instance.getClass());
         try {
-            Method method = AccessibleObjectUtil.findProperMethod(instance.getClass(),
+            if(getterMethod == null) {
+                getterMethod = AccessibleObjectUtil.findProperMethod(instance.getClass(),
                     Collections.<Class<?>>emptyList(), getterName);
-            return method.invoke(instance);
+            }
+            return getterMethod.invoke(instance);
         } catch(Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    protected void checkType(Class<?> aClass) {
+        if(aClass != clazz) {
+            throw new RuntimeException("Object passed in of type: " + aClass.getName() + ", and required" +
+                    "type is " + clazz.getName());
         }
     }
 }

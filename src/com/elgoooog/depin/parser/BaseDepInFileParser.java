@@ -51,6 +51,41 @@ public abstract class BaseDepInFileParser implements DepInFileParser {
         }
     }
 
+    protected void updateBeanWithRefProperty(Bean bean, String property, Bean ref) {
+        bean.addProperty(new Property(bean.getBeanClass(), property, new Ref(ref)));
+    }
+
+    protected void updateBeanWithLiteralProperty(Bean bean, String type, String property, String val) {
+        if("int".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(int.class, Integer.parseInt(val))));
+        } else if("float".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(float.class, Float.parseFloat(val))));
+        } else if("long".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(long.class, Long.parseLong(val))));
+        } else if("double".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(double.class, Double.parseDouble(val))));
+        } else if("short".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(short.class, Short.parseShort(val))));
+        } else if("byte".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(byte.class, Byte.parseByte(val))));
+        } else if("boolean".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(boolean.class, Boolean.parseBoolean(val))));
+        } else if("char".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(char.class, val.charAt(0))));
+        } else if("string".equalsIgnoreCase(type)) {
+            bean.addProperty(
+                    new Property(bean.getBeanClass(), property, new Literal(val)));
+        }
+    }
+
     protected Bean createBean(String scope, String clazz) {
         if ("singleton".equalsIgnoreCase(scope)) {
             return new SingletonBean(clazz);

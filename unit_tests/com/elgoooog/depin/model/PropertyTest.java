@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * @author Nicholas Hauschild
@@ -15,11 +16,11 @@ import static org.junit.Assert.assertNotNull;
  */
 public class PropertyTest {
     @Test
-    public void testSetOn() throws Exception {
+    public void setOnTest() throws Exception {
         Bean dogBean = new PrototypeBean("com.elgoooog.depin.test.zoo.animal.Dog");
         dogBean.addArg(new Literal("Fido"));
 
-        Property property = new Property("animal", dogBean);
+        Property property = new Property(Cage.class, "animal", new Ref(dogBean));
         Cage cage = new Cage();
 
         property.setOn(cage);
@@ -31,8 +32,8 @@ public class PropertyTest {
     }
 
     @Test
-    public void testGetFrom() throws Exception {
-        Property property = new Property("animal", null);
+    public void getFromTest() throws Exception {
+        Property property = new Property(Cage.class, "animal", null);
         Cage cage = new Cage();
         cage.setAnimal(new Dog("Fido"));
 
@@ -41,5 +42,15 @@ public class PropertyTest {
         assertNotNull(dog);
         assertEquals(Dog.class, dog.getClass());
         assertEquals("Fido", ((Dog)dog).getName());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void checkTypeTest() throws Exception {
+        Property property = new Property(Cage.class, "animal", null);
+        property.checkType(Cage.class);
+
+        //bomb here...
+        property.checkType(Dog.class);
+        fail();
     }
 }

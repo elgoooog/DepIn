@@ -74,7 +74,7 @@ public class DepInStaxParserTest {
     }
 
     @Test
-    public void getArgHolderTest() throws Exception {
+    public void getHolderTest() throws Exception {
         Map<Bean, List<DepInStaxParser.ArgHolder>> argHolders = new HashMap<Bean, List<DepInStaxParser.ArgHolder>>();
         Bean beanPresent = new PrototypeBean("com.elgoooog.depin.test.zoo.animal.Dog");
         Bean beanAbsent = new PrototypeBean("com.elgoooog.depin.test.zoo.animal.Dog");
@@ -85,11 +85,11 @@ public class DepInStaxParserTest {
 
         argHolders.put(beanPresent, presentArgHolder);
 
-        List<DepInStaxParser.ArgHolder> actual1 = parser.getArgHolder(beanPresent, argHolders);
+        List<DepInStaxParser.ArgHolder> actual1 = parser.getHolder(beanPresent, argHolders);
         assertEquals(actual1, presentArgHolder);
         assertEquals(2, actual1.size());
 
-        List<DepInStaxParser.ArgHolder> actual2 = parser.getArgHolder(beanAbsent, argHolders);
+        List<DepInStaxParser.ArgHolder> actual2 = parser.getHolder(beanAbsent, argHolders);
         assertTrue(actual2.isEmpty());
     }
 }
