@@ -1,5 +1,6 @@
 package com.elgoooog.depin;
 
+import com.elgoooog.depin.exception.NameAlreadyBoundException;
 import com.elgoooog.depin.model.Bean;
 
 import java.util.HashMap;
@@ -15,6 +16,9 @@ public class Beans implements Iterable<Bean> {
     private Map<String, Bean> beanModel = new HashMap<String, Bean>();
 
     public void addBean(String id, Bean bean) {
+        if(beanModel.containsKey(id)) {
+            throw new NameAlreadyBoundException("Bean name is already bound in this DepIn instance: " + id);
+        }
         beanModel.put(id, bean);
     }
 

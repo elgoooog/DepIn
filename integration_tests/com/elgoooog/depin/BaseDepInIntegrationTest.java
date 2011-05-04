@@ -1,6 +1,9 @@
 package com.elgoooog.depin;
 
 import com.elgoooog.depin.exception.CycleException;
+import com.elgoooog.depin.exception.NameAlreadyBoundException;
+import com.elgoooog.depin.inject.BeanInjector;
+import com.elgoooog.depin.parser.DepInStaxParser;
 import com.elgoooog.depin.test.inject.Brain;
 import com.elgoooog.depin.test.inject.Fridge;
 import com.elgoooog.depin.test.inject.Kitchen;
@@ -9,7 +12,7 @@ import com.elgoooog.depin.test.zoo.Cage;
 import com.elgoooog.depin.test.zoo.animal.Animal;
 import com.elgoooog.depin.test.zoo.animal.Cat;
 import com.elgoooog.depin.test.zoo.animal.Dog;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -20,9 +23,13 @@ import static org.junit.Assert.*;
  *         Time: 12:18 AM
  */
 
-@Ignore
 public class BaseDepInIntegrationTest {
     protected DepIn depin;
+
+    @Before
+    public void initStaxParser() throws Exception {
+        depin = new DepIn(new DepInFileLoader(new DepInStaxParser()), new BeanInjector());
+    }
 
     @Test
     public void testDefaultConstructor() throws Exception {
@@ -106,8 +113,6 @@ public class BaseDepInIntegrationTest {
         depin.loadConfiguration("config/depinTest_cycle.xml");
 
         depin.get("testParent");
-
-        fail();
     }
 
     @Test(expected = CycleException.class)
@@ -115,8 +120,11 @@ public class BaseDepInIntegrationTest {
         depin.loadConfiguration("config/depinTest_cycle.xml");
 
         depin.get("testA");
+    }
 
-        fail();
+    @Test(expected = NameAlreadyBoundException.class)
+    public void testDuplicateNames() throws Exception {
+        depin.loadConfiguration("config/depinTest_nameAlreadyExists.xml");
     }
 
     @Test
