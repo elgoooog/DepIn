@@ -124,7 +124,7 @@ public class BaseDepInIntegrationTest {
 
     @Test(expected = NameAlreadyBoundException.class)
     public void testDuplicateNames() throws Exception {
-        depin.loadConfiguration("config/depinTest_nameAlreadyExists.xml");
+        depin.loadConfiguration("config/depinTest_NameAlreadyExists.xml");
     }
 
     @Test
